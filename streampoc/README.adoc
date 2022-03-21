@@ -1,0 +1,12 @@
+= Single App Sample for Kayak demo 
+
+== Build the application
+```
+cd streampoc
+mvn clean package
+```
+
+== Launch App
+```
+java -jar target/streampoc-0.0.1-SNAPSHOT.jar
+```

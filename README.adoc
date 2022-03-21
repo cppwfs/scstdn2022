@@ -13,3 +13,6 @@ A boot application that will retrieve the creek data from the USGS for a selecte
 
 === Creek Consumer
 A boot application that will consume the `CreekMeasurement` s and log the streams that are safe-ish to kayak from the provided data.
+
+=== Stream POC
+Single App POC that is used as a basic outline for the demo.
