@@ -1,0 +1,11 @@
+= Spring Cloud Stream Past, Present, and Future.
+
+== Creek Producer
+A boot application that will retrieve the creek data from the USGS for a selected set of creeks and translate the results to a list of `CreekMeasurement` s.
+
+==== Build & Run Sample
+[source,bash]
+----
+mvn clean package -DskipTests
+java -jar target/creekproducer-0.0.1-SNAPSHOT.jar
+----

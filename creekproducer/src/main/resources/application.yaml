@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: creekDataSupplier|transformCreekMeasurement
+        bindings:
+          creekDataSuppliertransformCreekMeasurement-out-0: output

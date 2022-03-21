@@ -1,0 +1,15 @@
+= Spring Cloud Stream Past, Present, and Future.
+
+This repository contains the projects that are demoed during the breakout discussion.
+These projects are meant to provide a quick start for experimenting with various features of Spring Cloud Function and Spring Cloud Stream
+
+== Projects
+
+=== Creek Functions
+A collection of functions that can be used with the Producer, Function, and Consumer portions demonstration
+
+=== Creek Producer
+A boot application that will retrieve the creek data from the USGS for a selected set of creeks and translate the results to a list of `CreekMeasurement` s.
+
+=== Creek Consumer
+A boot application that will consume the `CreekMeasurement` s and log the streams that are safe-ish to kayak from the provided data.

@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: logCreekMeasurementAggregate
+        bindings:
+          logCreekMeasurementAggregate-in-0: input

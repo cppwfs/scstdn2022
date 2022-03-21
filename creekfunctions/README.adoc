@@ -1,0 +1,10 @@
+= Spring Cloud Stream Past, Present, and Future.
+
+== Creek Functions
+A collection of functions that can be used with the Producer, Function, and Consumer portions demonstration
+
+==== Build
+[source,bash]
+----
+mvn clean install -DskipTests
+----
