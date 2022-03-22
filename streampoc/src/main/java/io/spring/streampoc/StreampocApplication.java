@@ -15,11 +15,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import reactor.core.publisher.Mono;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -34,6 +36,12 @@ public class StreampocApplication {
 		SpringApplication.run(StreampocApplication.class, args);
 	}
 
+	@Autowired
+	private CreekRepository repository;
+
+	@Autowired
+	private ConfigurableApplicationContext context;
+
 	@Bean
 	public ApplicationRunner applicationRunner(CreekProperties creekProperties, Function<String, List<CreekMeasurement>> transformCreekMeasurement, Consumer<List<CreekMeasurement>> produceReport) {
 		return new ApplicationRunner() {
@@ -41,7 +49,7 @@ public class StreampocApplication {
 			@Override
 			public void run(ApplicationArguments args) throws Exception {
 				LocalDateTime endTime = LocalDateTime.now();
-				LocalDateTime startTime = endTime.minusHours(4);
+				LocalDateTime startTime = endTime.minusHours(5);
 				ZoneId zoneId = ZoneId.of("America/New_York");
 				ZonedDateTime zonedDateTime = ZonedDateTime.of(startTime, zoneId);
 				ZonedDateTime endDateTime = ZonedDateTime.of(endTime, zoneId);
@@ -54,7 +62,7 @@ public class StreampocApplication {
 
 				List<CreekMeasurement> creekMeasurements = transformCreekMeasurement.apply(creekMono.block());
 				produceReport.accept(creekMeasurements);
-				System.exit(0);
+				context.close();
 			}
 		};
 	}
@@ -73,7 +81,9 @@ public class StreampocApplication {
 				arrayData.forEach(streamData -> {
 					CreekMeasurement creekMeasurement = new CreekMeasurement(streamData);
 					creekMeasurements.add(creekMeasurement);
+					repository.save(creekMeasurement);
 				});
+				repository.findAll().forEach(cm -> System.out.println(cm));
 				return creekMeasurements;
 			}
 			

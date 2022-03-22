@@ -1,4 +1,8 @@
-= Single App Sample for Kayak demo 
+= Single App Sample for Kayak demo
+
+Retrieves creek information from the USGS for 3 creeks.   It then stores this
+information into the `creek_measurement` table.  It then reports to console which
+of the creeks is in a condition that they may be kayaked.
 
 == Build the application
 ```
@@ -6,7 +10,17 @@ cd streampoc
 mvn clean package
 ```
 
-== Launch App
+== Launch App with H2 embedded DB
 ```
 java -jar target/streampoc-0.0.1-SNAPSHOT.jar
+```
+
+== Launch App with Mariadb
+```
+export spring_datasource_url=jdbc:mariadb://localhost:3306/<your db>
+export spring_datasource_username=<your user>
+export spring_datasource_password=<your password>
+export spring_datasource_driverClassName=org.mariadb.jdbc.Driver
+
+java -jar target/streampoc-0.0.1-SNAPSHOT.jar --spring.jpa.hibernate.ddl-auto=update
 ```
