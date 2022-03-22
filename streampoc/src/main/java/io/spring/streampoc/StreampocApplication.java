@@ -1,6 +1,9 @@
 package io.spring.streampoc;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +13,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import reactor.core.publisher.Mono;
+
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,8 +22,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @EnableConfigurationProperties(CreekProperties.class)
@@ -39,17 +42,19 @@ public class StreampocApplication {
 			public void run(ApplicationArguments args) throws Exception {
 				LocalDateTime endTime = LocalDateTime.now();
 				LocalDateTime startTime = endTime.minusHours(4);
-
+				ZoneId zoneId = ZoneId.of("America/New_York");
+				ZonedDateTime zonedDateTime = ZonedDateTime.of(startTime, zoneId);
+				ZonedDateTime endDateTime = ZonedDateTime.of(endTime, zoneId);
 				Mono<String> creekMono = WebClient.create()
 						.get()
 						.uri("https://waterservices.usgs.gov/nwis/iv/?sites=" + creekProperties.getSites() +
-								"&parameterCd=00065&startDT=" + startTime + "-05:00&endDT=" +
-								endTime + "-05:00&siteStatus=all&format=rdb")
+								"&parameterCd=00065&startDT=" + zonedDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) + "&endDT=" +
+								endDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) + "&siteStatus=all&format=rdb")
 						.retrieve().bodyToMono(String.class);
 
 				List<CreekMeasurement> creekMeasurements = transformCreekMeasurement.apply(creekMono.block());
 				produceReport.accept(creekMeasurements);
-
+				System.exit(0);
 			}
 		};
 	}
