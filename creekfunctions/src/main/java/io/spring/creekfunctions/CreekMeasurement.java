@@ -18,8 +18,14 @@ package io.spring.creekfunctions;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+
+import org.springframework.util.Assert;
+
 
 public class CreekMeasurement {
+
+	private String creekMeasurementKey;
 
 	private String sensorId;
 	private ZonedDateTime dateCaptured;
@@ -27,12 +33,19 @@ public class CreekMeasurement {
 	private String status;
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm z");
 
-	public CreekMeasurement(String stringData) {
-		String[] rawData = stringData.split("\t");
+	public CreekMeasurement() {
+
+	}
+
+	public CreekMeasurement(String creekData) {
+		Assert.hasLength(creekData, "creekData must not be null or empty");
+		String[] rawData = creekData.split("\t");
 		this.sensorId = rawData[1];
 		this.dateCaptured = ZonedDateTime.parse(rawData[2] + " " +rawData[3], formatter);
 		this.streamHeight = Float.valueOf(rawData[4]);
 		this.status = rawData[5];
+		creekMeasurementKey = this.sensorId + this.dateCaptured;
+
 	}
 	public ZonedDateTime getDateCaptured() {
 		return dateCaptured;
@@ -63,5 +76,22 @@ public class CreekMeasurement {
 	public String toString() {
 		return sensorId + " " + this.dateCaptured + " " + this.streamHeight + " " + this.status;
 	}
+	public String getCreekMeasurementKey() {
+		return creekMeasurementKey;
+	}
 
+	public void setCreekMeasurementKey(String creekMeasurementKey) {
+		this.creekMeasurementKey = creekMeasurementKey;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof CreekMeasurement)) return false;
+		CreekMeasurement that = (CreekMeasurement) o;
+		return Objects.equals(creekMeasurementKey, that.creekMeasurementKey) &&
+				Objects.equals(sensorId, that.sensorId) &&
+				Objects.equals(streamHeight, that.streamHeight) &&
+				Objects.equals(status, that.status);
+	}
 }

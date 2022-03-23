@@ -20,20 +20,20 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.springframework.messaging.Message;
 
-public class LogCreekMeasurementAggregate implements Consumer<Message<String>> {
+public class LogCreekMeasurements implements Consumer<Message<String>> {
 
-	ObjectMapper objectMapper = new ObjectMapper();
-	private static final Log logger = LogFactory.getLog(LogCreekMeasurementAggregate.class);
+	ObjectMapper objectMapper;
 
-	public LogCreekMeasurementAggregate() {
+	public LogCreekMeasurements() {
 		System.out.println("***** Constructor *****");
-
+		this.objectMapper = new ObjectMapper();
+		this.objectMapper.registerModule(new JavaTimeModule());
 	}
 
 	@Override
@@ -41,37 +41,42 @@ public class LogCreekMeasurementAggregate implements Consumer<Message<String>> {
 		List<CreekMeasurement> creekMeasurements = null;
 		System.out.println("***** HERE *****");
 		try {
-			creekMeasurements = objectMapper.readValue(stringMessage.getPayload(), List.class);
+			creekMeasurements = objectMapper.readValue(stringMessage.getPayload(),
+					new TypeReference<List<CreekMeasurement>>() {
+					});
 		}
 		catch (JsonProcessingException jpe) {
-			throw new IllegalStateException(jpe);
+			throw new IllegalStateException("Unable to parse CreekMeasurements", jpe);
 		}
-			CreekMeasurement controlMeasurement = null;
-			CreekMeasurement previousMeasurement = null;
-			for (CreekMeasurement measurement : creekMeasurements) {
-				if (controlMeasurement == null) {
-					controlMeasurement = measurement;
-					continue;
-				}
-				if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
-					logger.info(previousMeasurement.getSensorId() + " "
-							+ getSymbol(controlMeasurement, previousMeasurement));
-
-					controlMeasurement = measurement;
-				}
-				previousMeasurement = measurement;
+		CreekMeasurement controlMeasurement = null;
+		CreekMeasurement previousMeasurement = null;
+		for (CreekMeasurement measurement : creekMeasurements) {
+			if (controlMeasurement == null) {
+				controlMeasurement = measurement;
+				continue;
 			}
-			logger.info(previousMeasurement.getSensorId() + " "
-					+ getSymbol(controlMeasurement, previousMeasurement));
+			if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
+
+				System.out.println(previousMeasurement.getSensorId() + " "
+						+ getSymbol(controlMeasurement, previousMeasurement));
+
+				controlMeasurement = measurement;
+			}
+			previousMeasurement = measurement;
 		}
+		System.out.println(previousMeasurement.getSensorId() + " "
+				+ getSymbol(controlMeasurement, previousMeasurement));
+
+	}
 
 	private String getSymbol(CreekMeasurement controlMeasurement, CreekMeasurement previousMeasurement) {
-		double warnPercentage = ((controlMeasurement.getStreamHeight() - previousMeasurement.getStreamHeight())
+		double warnPercentage = ((previousMeasurement.getStreamHeight() - controlMeasurement.getStreamHeight() )
 				/ previousMeasurement.getStreamHeight());
+		System.out.println("*******" + warnPercentage);
 		String symbol = Character.toString('\u2705');
-		if (warnPercentage >.05) {
+		if (warnPercentage > .05) {
 			symbol = Character.toString('\u274c');
 		}
 		return symbol;
 	}
-	}
+}

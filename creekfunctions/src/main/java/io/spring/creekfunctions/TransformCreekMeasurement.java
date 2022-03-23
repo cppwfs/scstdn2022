@@ -29,9 +29,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.GenericMessage;
 
+
+/**
+ * Accepts a tab delimited list of data from the USGS  Water Data Restful API and converts it ot a list of {@link CreekMeasurement}s.
+ */
 public class TransformCreekMeasurement implements Function<Message<String>, Message<String>> {
 	public Message<String> apply(Message<String> rawData) {
-		System.out.println("***** TRANSFORMING ****");
 		String[] results = rawData.getPayload().split(System.lineSeparator());
 		List<String> arrayData = Arrays.stream(results)
 				.filter(result -> result.startsWith("USGS"))
