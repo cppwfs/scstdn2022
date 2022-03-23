@@ -2,6 +2,6 @@ spring:
   cloud:
     stream:
       function:
-        definition: logCreekMeasurementAggregate
+        definition: logCreekMeasurements
         bindings:
-          logCreekMeasurementAggregate-in-0: input
+          logCreekMeasurements-in-0: input

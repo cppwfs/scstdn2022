@@ -2,7 +2,7 @@ package io.spring.creekproducer;
 
 import java.util.function.Consumer;
 
-import io.spring.creekfunctions.LogCreekMeasurementAggregate;
+import io.spring.creekfunctions.LogCreekMeasurements;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +17,7 @@ public class CreekConsumerApplication {
 	}
 
 	@Bean
-	public Consumer<Message<String>> logCreekMeasurementAggregate() {
-		return new LogCreekMeasurementAggregate();
+	public Consumer<Message<String>> logCreekMeasurements() {
+		return new LogCreekMeasurements();
 	}
 }
