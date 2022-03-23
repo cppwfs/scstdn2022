@@ -26,9 +26,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.springframework.messaging.Message;
 
+/**
+ * Looks at each creek sites data for each payload and determines if the creek
+ * is safe-ish for kayaking. It then prints this result to console.
+ */
 public class LogCreekMeasurements implements Consumer<Message<String>> {
 
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 
 	public LogCreekMeasurements() {
 		System.out.println("***** Constructor *****");
@@ -72,7 +76,6 @@ public class LogCreekMeasurements implements Consumer<Message<String>> {
 	private String getSymbol(CreekMeasurement controlMeasurement, CreekMeasurement previousMeasurement) {
 		double warnPercentage = ((previousMeasurement.getStreamHeight() - controlMeasurement.getStreamHeight() )
 				/ previousMeasurement.getStreamHeight());
-		System.out.println("*******" + warnPercentage);
 		String symbol = Character.toString('\u2705');
 		if (warnPercentage > .05) {
 			symbol = Character.toString('\u274c');

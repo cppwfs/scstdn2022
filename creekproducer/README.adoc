@@ -6,6 +6,6 @@ A boot application that will retrieve the creek data from the USGS for a selecte
 ==== Build & Run Sample
 [source,bash]
 ----
-mvn clean package -DskipTests
-java -jar target/creekproducer-0.0.1-SNAPSHOT.jar
+mvn clean package
+java -jar target/creekproducer-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.output.destination=creek-data  --server.port=0
 ----

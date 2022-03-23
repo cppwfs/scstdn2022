@@ -3,8 +3,24 @@
 == Creek Functions
 A collection of functions that can be used with the Producer, Function, and Consumer portions demonstration
 
-==== Build
+== Build
 [source,bash]
 ----
-mvn clean install -DskipTests
+mvn clean install
+----
+
+== Mariadb DDL for the CreekDataRepository
+[source,sql]
+----
+CREATE TABLE creek_measurement
+(
+   creek_measurement_key varchar(255) PRIMARY KEY NOT NULL,
+   date_captured timestamp,
+   sensor_id varchar(255),
+   status varchar(255),
+   stream_height real
+)
+;
+CREATE UNIQUE INDEX PRIMARY ON creek_measurement(creek_measurement_key)
+;
 ----
