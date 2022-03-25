@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.spring</groupId>
-	<artifactId>creekconsumer</artifactId>
+	<artifactId>creeklogconsumer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>creekconsumer</name>
+	<name>creeklogconsumer</name>
 	<description>Consumer for Creek Data</description>
 	<properties>
 		<java.version>17</java.version>

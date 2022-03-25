@@ -1,4 +1,4 @@
-package io.spring.creekproducer;
+package io.spring.creekconsumer;
 
 import java.util.function.Consumer;
 
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 
 @SpringBootApplication
-public class CreekConsumerApplication {
+public class CreekLogConsumerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CreekConsumerApplication.class, args);
+		SpringApplication.run(CreekLogConsumerApplication.class, args);
 	}
 
 	@Bean

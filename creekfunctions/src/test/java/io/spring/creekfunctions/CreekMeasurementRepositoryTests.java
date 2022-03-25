@@ -26,14 +26,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.messaging.support.GenericMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreekDataRepositoryTests {
+public class CreekMeasurementRepositoryTests {
 
 	private final static String DATASOURCE_URL;
 
@@ -51,7 +50,7 @@ public class CreekDataRepositoryTests {
 				+ "DB_CLOSE_ON_EXIT=FALSE";
 	}
 
-	private CreekDataRepository creekDataRepository;
+	private CreekMeasurementRepository creekDataRepository;
 
 	private DataSource dataSource;
 
@@ -86,7 +85,7 @@ public class CreekDataRepositoryTests {
 										);
 				"""
 			);
-			this.creekDataRepository = new CreekDataRepository(this.dataSource);
+			this.creekDataRepository = new CreekMeasurementRepository(this.dataSource);
 
 		}
 		catch (SQLException e) {

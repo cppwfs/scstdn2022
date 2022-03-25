@@ -33,15 +33,15 @@ import org.springframework.messaging.Message;
 /**
  * Stores CreekMeasurements to a relational repository for table creek_measurement
  */
-public class CreekDataRepository implements Consumer<Message<String>> {
+public class CreekMeasurementRepository implements Consumer<Message<String>> {
 
-	private static final Log logger = LogFactory.getLog(CreekDataRepository.class);
+	private static final Log logger = LogFactory.getLog(CreekMeasurementRepository.class);
 
 	private ObjectMapper objectMapper;
 
 	private DataSource dataSource;
 
-	public CreekDataRepository(DataSource dataSource) {
+	public CreekMeasurementRepository(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.objectMapper = new ObjectMapper();
 		this.objectMapper.registerModule(new JavaTimeModule());
