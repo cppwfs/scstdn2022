@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: creekMeasurementRepository
+        bindings:
+          logCreekMeasurements-in-0: input
