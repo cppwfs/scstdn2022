@@ -1,7 +1,7 @@
 = Spring Cloud Stream Past, Present, and Future
 
-== Creek Consumer
-A boot application that will consume the `CreekMeasurement` s and log the streams that are safe-ish to kayak from the provided data.
+== Creek Measurement Repository Consumer
+A boot application that will consume the `CreekMeasurement` s and store the data in either an H2 or MariaDB database.
 
 === Build & Run Sample
 [source,bash]

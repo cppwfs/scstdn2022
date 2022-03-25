@@ -11,8 +11,11 @@ A collection of functions that can be used with the Producer, Function, and Cons
 === Creek Producer
 A boot application that will retrieve the creek data from the USGS for a selected set of creeks and translate the results to a list of `CreekMeasurement` s.
 
-=== Creek Consumer
+=== Creek Log Consumer
 A boot application that will consume the `CreekMeasurement` s and log the streams that are safe-ish to kayak from the provided data.
+
+=== Creek MeasurementRepository Consumer
+A boot application that will consume the `CreekMeasurement` s from the stream and store them into a repository.
 
 === Stream POC
 Single App POC that is used as a basic outline for the demo.

@@ -1,6 +1,6 @@
 = Spring Cloud Stream Past, Present, and Future
 
-== Creek Consumer
+== Creek Log  Consumer
 A boot application that will consume the `CreekMeasurement` s and log the streams that are safe-ish to kayak from the provided data.
 
 === Build & Run Sample

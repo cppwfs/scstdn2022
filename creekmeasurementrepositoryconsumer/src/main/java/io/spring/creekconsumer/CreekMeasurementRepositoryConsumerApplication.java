@@ -2,7 +2,6 @@ package io.spring.creekconsumer;
 
 import java.util.function.Consumer;
 
-import io.spring.creekfunctions.CreekDataRepository;
 import io.spring.creekfunctions.CreekMeasurementRepository;
 import javax.sql.DataSource;
 
