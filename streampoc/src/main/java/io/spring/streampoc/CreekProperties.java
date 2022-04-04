@@ -11,8 +11,6 @@ public class CreekProperties {
 
     private float warningPercent = .2f;
 
-    private int timezoneOffset = 0;
-
     public String getSites() {
         return sites;
     }
@@ -36,12 +34,4 @@ public class CreekProperties {
     public void setSites(String sites) {
         this.sites = sites;
     }
-
-	public int getTimezoneOffset() {
-		return timezoneOffset;
-	}
-
-	public void setTimezoneOffset(int timezoneOffset) {
-		this.timezoneOffset = timezoneOffset;
-	}
 }

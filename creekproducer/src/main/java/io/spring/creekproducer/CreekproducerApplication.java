@@ -1,6 +1,7 @@
 package io.spring.creekproducer;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -52,7 +53,8 @@ public class CreekproducerApplication {
 	}
 
 	protected Message<String> getCreekData() {
-		LocalDateTime endTime = LocalDateTime.now();
+		ZoneId zoneId = ZoneId.of("America/New_York");
+		LocalDateTime endTime = LocalDateTime.now(zoneId);
 		LocalDateTime startTime = endTime.minusHours(4);
 
 		Mono<String> creekMono = WebClient.create()

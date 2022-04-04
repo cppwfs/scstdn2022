@@ -48,10 +48,9 @@ public class StreampocApplication {
 
 			@Override
 			public void run(ApplicationArguments args) throws Exception {
-				LocalDateTime endTime = LocalDateTime.now();
-				endTime = endTime.minusHours(creekProperties.getTimezoneOffset());
-				LocalDateTime startTime = endTime.minusHours(5);
 				ZoneId zoneId = ZoneId.of("America/New_York");
+				LocalDateTime endTime = LocalDateTime.now(zoneId);
+				LocalDateTime startTime = endTime.minusHours(5);
 				ZonedDateTime zonedDateTime = ZonedDateTime.of(startTime, zoneId);
 				ZonedDateTime endDateTime = ZonedDateTime.of(endTime, zoneId);
 				Mono<String> creekMono = WebClient.create()
