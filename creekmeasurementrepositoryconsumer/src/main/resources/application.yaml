@@ -9,7 +9,7 @@ spring:
       bindings:
         input:
           destination: creek-data
-          group: foo
+          group: foo-repo
   sql:
     init:
       mode: always
