@@ -73,7 +73,7 @@ public class LogCreekMeasurements implements Consumer<String> {
 		double warnPercentage = ((previousMeasurement.getStreamHeight() - controlMeasurement.getStreamHeight() )
 				/ previousMeasurement.getStreamHeight());
 		String symbol = Character.toString('\u2705');
-		if (warnPercentage > .05) {
+		if (Math.abs(warnPercentage) > .2) {
 			symbol = Character.toString('\u274c');
 		}
 		return symbol;

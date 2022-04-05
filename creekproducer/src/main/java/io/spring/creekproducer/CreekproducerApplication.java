@@ -10,7 +10,6 @@ import io.spring.creekfunctions.TransformCreekMeasurement;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.messaging.Message;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
@@ -56,12 +55,10 @@ public class CreekproducerApplication {
 		LocalDateTime startTime = endTime.minusHours(4);
 		RestTemplate template = new RestTemplate();
 		String result = SAMPLE_DATA;
-
-
 		try {
 			result = template.getForObject("https://waterservices.usgs.gov/nwis/iv/?sites=" + "02336300,02335757,02312700" +
-					"&parameterCd=00065&startDT=" + startTime + "-05:00&endDT=" +
-					endTime + "-05:00&siteStatus=all&format=rdb", String.class);
+					"&parameterCd=00065&startDT=" + startTime + "&endDT=" +
+					endTime + "&siteStatus=all&format=rdb", String.class);
 		} catch(Exception exception) {
 			System.out.println("Failed to retrieve data from USGS using sample date");;
 		}
