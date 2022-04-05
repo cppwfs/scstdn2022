@@ -24,8 +24,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.GenericMessage;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -33,7 +31,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @ExtendWith(OutputCaptureExtension.class)
 public class LogCreekMeasurementsTests {
 
-	private Consumer<Message<String>> logCreekMeasurements;
+	private Consumer<String> logCreekMeasurements;
 
 	@BeforeEach
 	public void prepLogMeasurements() {
@@ -50,7 +48,7 @@ public class LogCreekMeasurementsTests {
 				"{\"sensorId\":\"02335757\",\"dateCaptured\":1647951300.000000000,\"streamHeight\":3.33,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02336300\",\"dateCaptured\":1647945000.000000000,\"streamHeight\":2.77,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02336300\",\"dateCaptured\":1647950400.000000000,\"streamHeight\":5.77,\"status\":\"P\"}]";
-		this.logCreekMeasurements.accept(new GenericMessage<>(message));
+		this.logCreekMeasurements.accept(message);
 		String result = output.getAll();
 		assertThat(result).contains("02312700 ✅");
 		assertThat(result).contains("02335757 ✅");
@@ -65,7 +63,7 @@ public class LogCreekMeasurementsTests {
 				"{\"sensorId\":\"02335757\",\"dateCaptured\":1647945000.000000000,\"streamHeight\":3.35,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02335757\",\"dateCaptured\":1647951300.000000000,\"streamHeight\":3.33,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02336300\",\"dateCaptured\":1647950400.000000000,\"streamHeight\":5.77,\"status\":\"P\"}]";
-		this.logCreekMeasurements.accept(new GenericMessage<>(message));
+		this.logCreekMeasurements.accept(message);
 		String result = output.getAll();
 		assertThat(result).contains("02312700 ✅");
 		assertThat(result).contains("02335757 ✅");
@@ -75,7 +73,7 @@ public class LogCreekMeasurementsTests {
 	@Test
 	public void testLogCreekMeasurementNoData(CapturedOutput output) {
 		assertThatThrownBy(() -> {
-			this.logCreekMeasurements.accept(new GenericMessage<>(""));
+			this.logCreekMeasurements.accept("");
 		}).isInstanceOf(IllegalStateException.class)
 				.hasMessageContaining("Unable to parse CreekMeasurements");
 

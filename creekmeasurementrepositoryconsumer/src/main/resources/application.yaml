@@ -1,11 +1,15 @@
 spring:
   cloud:
+    function:
+      definition: creekMeasurementRepository
     stream:
       function:
-        definition: creekMeasurementRepository
         bindings:
-          logCreekMeasurements-in-0: input
-
+          creekMeasurementRepository-in-0: input
+      bindings:
+        input:
+          destination: creek-data
+          group: foo
   sql:
     init:
       mode: always

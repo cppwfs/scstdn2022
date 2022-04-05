@@ -6,14 +6,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import io.spring.creekfunctions.TransformCreekMeasurement;
-import reactor.core.publisher.Mono;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.support.GenericMessage;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class CreekproducerApplication {
@@ -48,33 +46,30 @@ public class CreekproducerApplication {
 	}
 
 	@Bean
-	public Supplier<Message<String>> creekDataSupplier() {
+	public Supplier<String> creekDataSupplier() {
 		return () -> getCreekData();
 	}
 
-	protected Message<String> getCreekData() {
+	protected String getCreekData() {
 		ZoneId zoneId = ZoneId.of("America/New_York");
 		LocalDateTime endTime = LocalDateTime.now(zoneId);
 		LocalDateTime startTime = endTime.minusHours(4);
-
-		Mono<String> creekMono = WebClient.create()
-				.get()
-				.uri("https://waterservices.usgs.gov/nwis/iv/?sites=" + "02336300,02335757,02312700" +
-						"&parameterCd=00065&startDT=" + startTime + "-05:00&endDT=" +
-						endTime + "-05:00&siteStatus=all&format=rdb")
-				.retrieve().bodyToMono(String.class);
-
+		RestTemplate template = new RestTemplate();
 		String result = SAMPLE_DATA;
+
+
 		try {
-			creekMono.block();
+			result = template.getForObject("https://waterservices.usgs.gov/nwis/iv/?sites=" + "02336300,02335757,02312700" +
+					"&parameterCd=00065&startDT=" + startTime + "-05:00&endDT=" +
+					endTime + "-05:00&siteStatus=all&format=rdb", String.class);
 		} catch(Exception exception) {
 			System.out.println("Failed to retrieve data from USGS using sample date");;
 		}
-		return new GenericMessage<>(result);
+		return result;
 	}
 
 	@Bean
-	public Function<Message<String>, Message<String>> transformCreekMeasurement() {
+	public Function<String, String> transformCreekMeasurement() {
 		return new TransformCreekMeasurement();
 	}
 

@@ -1,7 +1,12 @@
 spring:
   cloud:
+    function:
+      definition: logCreekMeasurements
     stream:
       function:
-        definition: logCreekMeasurements
         bindings:
           logCreekMeasurements-in-0: input
+      bindings:
+        input:
+          destination: creek-data
+          group: foo

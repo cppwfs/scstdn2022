@@ -33,7 +33,7 @@ import org.springframework.messaging.Message;
 /**
  * Stores CreekMeasurements to a relational repository for table creek_measurement
  */
-public class CreekMeasurementRepository implements Consumer<Message<String>> {
+public class CreekMeasurementRepository implements Consumer<String> {
 
 	private static final Log logger = LogFactory.getLog(CreekMeasurementRepository.class);
 
@@ -48,10 +48,10 @@ public class CreekMeasurementRepository implements Consumer<Message<String>> {
 	}
 
 	@Override
-	public void accept(Message<String> stringMessage) {
+	public void accept(String stringMessage) {
 		List<CreekMeasurement> creekMeasurements = null;
 		try {
-			creekMeasurements = objectMapper.readValue(stringMessage.getPayload(), new TypeReference<List<CreekMeasurement>>() {});
+			creekMeasurements = objectMapper.readValue(stringMessage, new TypeReference<List<CreekMeasurement>>() {});
 			for(CreekMeasurement creekMeasurement : creekMeasurements) {
 				storeCreekMeasurement(creekMeasurement);
 			}

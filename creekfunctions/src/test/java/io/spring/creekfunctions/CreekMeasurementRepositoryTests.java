@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.messaging.support.GenericMessage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -107,7 +106,7 @@ public class CreekMeasurementRepositoryTests {
 				"{\"sensorId\":\"02335757\",\"dateCaptured\":1647945000.000000000,\"streamHeight\":3.35,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02335757\",\"dateCaptured\":1647951300.000000000,\"streamHeight\":3.33,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02336300\",\"dateCaptured\":1647950400.000000000,\"streamHeight\":5.77,\"status\":\"P\"}]";
-		this.creekDataRepository.accept(new GenericMessage<>(message));
+		this.creekDataRepository.accept(message);
 		List<Map<String, Object>> result = this.template.queryForList("select * from creek_measurement");
 		assertThat(result.size()).isEqualTo(6);
 	}

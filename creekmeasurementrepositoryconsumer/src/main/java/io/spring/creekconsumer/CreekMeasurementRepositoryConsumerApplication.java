@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.messaging.Message;
 
 @SpringBootApplication
 public class CreekMeasurementRepositoryConsumerApplication {
@@ -18,7 +17,7 @@ public class CreekMeasurementRepositoryConsumerApplication {
 	}
 
 	@Bean
-	public Consumer<Message<String>> creekMeasurementRepository(DataSource dataSource) {
+	public Consumer<String> creekMeasurementRepository(DataSource dataSource) {
 		return new CreekMeasurementRepository(dataSource);
 	}
 }

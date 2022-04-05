@@ -26,16 +26,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.GenericMessage;
-
 
 /**
  * Accepts a tab delimited list of data from the USGS  Water Data Restful API and converts it ot a list of {@link CreekMeasurement}s.
  */
-public class TransformCreekMeasurement implements Function<Message<String>, Message<String>> {
-	public Message<String> apply(Message<String> rawData) {
-		String[] results = rawData.getPayload().split(System.lineSeparator());
+public class TransformCreekMeasurement implements Function<String, String> {
+	public String apply(String rawData) {
+		String[] results = rawData.split(System.lineSeparator());
 		List<String> arrayData = Arrays.stream(results)
 				.filter(result -> result.startsWith("USGS"))
 				.collect(Collectors.toList());
@@ -48,7 +45,7 @@ public class TransformCreekMeasurement implements Function<Message<String>, Mess
 		objectMapper.registerModule(new JavaTimeModule());
 
 		try {
-			return new GenericMessage<>(objectMapper.writeValueAsString(creekMeasurements));
+			return objectMapper.writeValueAsString(creekMeasurements);
 		}
 		catch (JsonProcessingException e) {
 			throw new IllegalStateException(e);

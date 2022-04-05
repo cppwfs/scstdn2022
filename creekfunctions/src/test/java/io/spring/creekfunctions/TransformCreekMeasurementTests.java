@@ -24,8 +24,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.messaging.support.GenericMessage;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TransformCreekMeasurementTests {
@@ -90,7 +88,7 @@ public class TransformCreekMeasurementTests {
 
 	private List<CreekMeasurement> getCreekMeasurementList(String message) throws Exception{
 		return objectMapper.readValue(
-				transformCreekMeasurement.apply(new GenericMessage<>(message)).getPayload(),
+				transformCreekMeasurement.apply(message),
 				new TypeReference<List<CreekMeasurement>>() {});
 	}
 }

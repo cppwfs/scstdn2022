@@ -24,28 +24,24 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import org.springframework.messaging.Message;
-
 /**
  * Looks at each creek sites data for each payload and determines if the creek
  * is safe-ish for kayaking. It then prints this result to console.
  */
-public class LogCreekMeasurements implements Consumer<Message<String>> {
+public class LogCreekMeasurements implements Consumer<String> {
 
 	private ObjectMapper objectMapper;
 
 	public LogCreekMeasurements() {
-		System.out.println("***** Constructor *****");
 		this.objectMapper = new ObjectMapper();
 		this.objectMapper.registerModule(new JavaTimeModule());
 	}
 
 	@Override
-	public void accept(Message<String> stringMessage) {
+	public void accept(String stringMessage) {
 		List<CreekMeasurement> creekMeasurements = null;
-		System.out.println("***** HERE *****");
 		try {
-			creekMeasurements = objectMapper.readValue(stringMessage.getPayload(),
+			creekMeasurements = objectMapper.readValue(stringMessage,
 					new TypeReference<List<CreekMeasurement>>() {
 					});
 		}
