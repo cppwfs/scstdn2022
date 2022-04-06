@@ -50,9 +50,9 @@ public class LogCreekMeasurementsTests {
 				"{\"sensorId\":\"02336300\",\"dateCaptured\":1647950400.000000000,\"streamHeight\":5.77,\"status\":\"P\"}]";
 		this.logCreekMeasurements.accept(message);
 		String result = output.getAll();
-		assertThat(result).contains("02312700 ✅");
-		assertThat(result).contains("02335757 ✅");
-		assertThat(result).contains("02336300 ❌");
+		assertThat(result).contains("✅ Outlet River Lake Panasoffkee");
+		assertThat(result).contains("✅ Big Creek Roswell");
+		assertThat(result).contains("❌ Peachtree Creek Atlanta");
 	}
 
 	@Test
@@ -65,9 +65,9 @@ public class LogCreekMeasurementsTests {
 				"{\"sensorId\":\"02336300\",\"dateCaptured\":1647950400.000000000,\"streamHeight\":5.77,\"status\":\"P\"}]";
 		this.logCreekMeasurements.accept(message);
 		String result = output.getAll();
-		assertThat(result).contains("02312700 ✅");
-		assertThat(result).contains("02335757 ✅");
-		assertThat(result).contains("02336300 ✅");
+		assertThat(result).contains("✅ Outlet River Lake Panasoffkee");
+		assertThat(result).contains("✅ Big Creek Roswell");
+		assertThat(result).contains("✅ Peachtree Creek Atlanta");
 	}
 
 	@Test

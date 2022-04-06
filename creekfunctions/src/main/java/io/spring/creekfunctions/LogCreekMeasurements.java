@@ -16,7 +16,9 @@
 
 package io.spring.creekfunctions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,9 +34,15 @@ public class LogCreekMeasurements implements Consumer<String> {
 
 	private ObjectMapper objectMapper;
 
+	private Map<String, String> nameCodeMap;
+
 	public LogCreekMeasurements() {
 		this.objectMapper = new ObjectMapper();
 		this.objectMapper.registerModule(new JavaTimeModule());
+		nameCodeMap = new HashMap<>();
+		nameCodeMap.put("02335757", "Big Creek Roswell");
+		nameCodeMap.put("02336300", "Peachtree Creek Atlanta");
+		nameCodeMap.put("02312700", "Outlet River Lake Panasoffkee");
 	}
 
 	@Override
@@ -56,16 +64,14 @@ public class LogCreekMeasurements implements Consumer<String> {
 				continue;
 			}
 			if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
-
-				System.out.println(previousMeasurement.getSensorId() + " "
-						+ getSymbol(controlMeasurement, previousMeasurement));
-
+				System.out.println(getSymbol(controlMeasurement, previousMeasurement) + " " +
+						nameCodeMap.get(previousMeasurement.getSensorId()) );
 				controlMeasurement = measurement;
 			}
 			previousMeasurement = measurement;
 		}
-		System.out.println(previousMeasurement.getSensorId() + " "
-				+ getSymbol(controlMeasurement, previousMeasurement));
+		System.out.println(getSymbol(controlMeasurement, previousMeasurement) + " " +
+				nameCodeMap.get(previousMeasurement.getSensorId()));
 
 	}
 

@@ -6,7 +6,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -24,11 +26,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 @EnableConfigurationProperties(CreekProperties.class)
 public class StreampocApplication {
+
+	private Map<String, String> nameCodeMap;
 
 	private static final Log logger = LogFactory
 			.getLog(StreampocApplication.class);
@@ -49,6 +52,11 @@ public class StreampocApplication {
 
 			@Override
 			public void run(ApplicationArguments args) throws Exception {
+				nameCodeMap = new HashMap<>();
+				nameCodeMap.put("02335757", "Big Creek Roswell");
+				nameCodeMap.put("02336300", "Peachtree Creek Atlanta");
+				nameCodeMap.put("02312700", "Outlet River Lake Panasoffkee");
+
 				ZoneId zoneId = ZoneId.of("America/New_York");
 				LocalDateTime endTime = LocalDateTime.now(zoneId);
 				LocalDateTime startTime = endTime.minusHours(5);
@@ -105,15 +113,15 @@ public class StreampocApplication {
 						continue;
 					}
 					if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
-						logger.info(previousMeasurement.getSensorId() + " "
-								+ getSymbol(controlMeasurement, previousMeasurement, properties));
+						logger.info(getSymbol(controlMeasurement, previousMeasurement, properties) + " " +
+								nameCodeMap.get(previousMeasurement.getSensorId())) ;
 		
 						controlMeasurement = measurement;
 					}
 					previousMeasurement = measurement;
 				}
-				logger.info(previousMeasurement.getSensorId() + " "
-						+ getSymbol(controlMeasurement, previousMeasurement, properties));
+				logger.info(getSymbol(controlMeasurement, previousMeasurement, properties) + " " +
+						nameCodeMap.get(previousMeasurement.getSensorId()));
 			}
 			
 		};
