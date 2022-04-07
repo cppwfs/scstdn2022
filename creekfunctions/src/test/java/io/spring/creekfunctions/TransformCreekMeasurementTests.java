@@ -18,7 +18,6 @@ package io.spring.creekfunctions;
 
 import java.util.List;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,8 +86,7 @@ public class TransformCreekMeasurementTests {
 	}
 
 	private List<CreekMeasurement> getCreekMeasurementList(String message) throws Exception{
-		return objectMapper.readValue(
-				transformCreekMeasurement.apply(message),
-				new TypeReference<List<CreekMeasurement>>() {});
+		return
+				transformCreekMeasurement.apply(message);
 	}
 }

@@ -2,6 +2,7 @@
 
 This repository contains the projects that are demoed during the breakout discussion.
 These projects are meant to provide a quick start for experimenting with various features of Spring Cloud Function and Spring Cloud Stream
+All samples use RabbitMQ as the Messaging Framework.
 
 == Projects
 
@@ -9,15 +10,23 @@ These projects are meant to provide a quick start for experimenting with various
 A collection of functions that can be used with the Producer, Function, and Consumer portions demonstration
 
 === Creek Producer
-A boot application that will retrieve the creek data from the USGS for a selected set of creeks and translate the results to a list of `CreekMeasurement` s.
+A boot application that will retrieve the creek data from the USGS for a selected set of creeks and send it to the specified destination (rabbit exchange).
+
+=== Creek Transformer
+A boot application transforms USGS Water Information System data to `CreekMeasurements` s.
+
 
 === Creek Log Consumer
-A boot application that will consume the `CreekMeasurement` s from the stream and log the creeks that are safe-ish to kayak from the provided data.
+A boot application that will consume the `CreekMeasurement` s from the stream and either log or send an sms message containging information on  the creeks that are safe-ish to kayak from the provided data.
+
+NOTE: Do not determine if it is safe to kayak a stream, river, or any body of water based soley on the this analysis.  It is for demonstration purposes only.
 
 === Creek MeasurementRepository Consumer
 A boot application that will consume the `CreekMeasurement` s from the stream and store them into a repository.
 
 === Stream POC
 Single App POC that is used as a basic outline for the demo.
+
+
 
 

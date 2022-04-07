@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -30,7 +28,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * Looks at each creek sites data for each payload and determines if the creek
  * is safe-ish for kayaking. It then prints this result to console.
  */
-public class LogCreekMeasurements implements Consumer<String> {
+public class LogCreekMeasurements implements Consumer<List<CreekMeasurement>> {
 
 	private ObjectMapper objectMapper;
 
@@ -46,18 +44,12 @@ public class LogCreekMeasurements implements Consumer<String> {
 	}
 
 	@Override
-	public void accept(String stringMessage) {
-		List<CreekMeasurement> creekMeasurements = null;
-		try {
-			creekMeasurements = objectMapper.readValue(stringMessage,
-					new TypeReference<List<CreekMeasurement>>() {
-					});
-		}
-		catch (JsonProcessingException jpe) {
-			throw new IllegalStateException("Unable to parse CreekMeasurements", jpe);
-		}
+	public void accept(List<CreekMeasurement> creekMeasurements) {
 		CreekMeasurement controlMeasurement = null;
 		CreekMeasurement previousMeasurement = null;
+		if(creekMeasurements.size() == 0) {
+			return;
+		}
 		for (CreekMeasurement measurement : creekMeasurements) {
 			if (controlMeasurement == null) {
 				controlMeasurement = measurement;

@@ -1,14 +1,14 @@
 spring:
   cloud:
     function:
-      definition: creekDataSupplier|transformCreekMeasurement
+      definition: creekDataSupplier
     stream:
       poller:
         fixed-delay: 15000
       function:
         bindings:
-          creekDataSuppliertransformCreekMeasurement-out-0: output
+          creekDataSupplier-out-0: output
       bindings:
         output:
-          destination: creek-data
+          destination: usgs-data
           group: foo

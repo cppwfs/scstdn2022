@@ -20,6 +20,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javax.sql.DataSource;
 import org.h2.tools.Server;
 import org.junit.jupiter.api.AfterEach;
@@ -99,15 +102,23 @@ public class CreekMeasurementRepositoryTests {
 	}
 
 	@Test
-	public void testBasic() {
+	public void testBasic() throws Exception{
 		String message = "[{\"sensorId\":\"02312700\",\"dateCaptured\":1647945000.000000000,\"streamHeight\":39.93,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02312700\",\"dateCaptured\":1647945900.000000000,\"streamHeight\":39.93,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02312700\",\"dateCaptured\":1647953100.000000000,\"streamHeight\":39.93,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02335757\",\"dateCaptured\":1647945000.000000000,\"streamHeight\":3.35,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02335757\",\"dateCaptured\":1647951300.000000000,\"streamHeight\":3.33,\"status\":\"P\"}," +
 				"{\"sensorId\":\"02336300\",\"dateCaptured\":1647950400.000000000,\"streamHeight\":5.77,\"status\":\"P\"}]";
-		this.creekDataRepository.accept(message);
+		this.creekDataRepository.accept(getCreekMeasurements(message));
 		List<Map<String, Object>> result = this.template.queryForList("select * from creek_measurement");
 		assertThat(result.size()).isEqualTo(6);
+	}
+
+	private List<CreekMeasurement> getCreekMeasurements(String measurements) throws Exception{
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		return objectMapper.readValue(
+				measurements,
+				new TypeReference<>() {});
 	}
 }

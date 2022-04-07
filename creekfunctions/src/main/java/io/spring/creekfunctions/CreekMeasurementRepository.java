@@ -19,8 +19,6 @@ package io.spring.creekfunctions;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javax.sql.DataSource;
@@ -28,12 +26,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.messaging.Message;
 
 /**
  * Stores CreekMeasurements to a relational repository for table creek_measurement
  */
-public class CreekMeasurementRepository implements Consumer<String> {
+public class CreekMeasurementRepository implements Consumer<List<CreekMeasurement>> {
 
 	private static final Log logger = LogFactory.getLog(CreekMeasurementRepository.class);
 
@@ -48,17 +45,11 @@ public class CreekMeasurementRepository implements Consumer<String> {
 	}
 
 	@Override
-	public void accept(String stringMessage) {
-		List<CreekMeasurement> creekMeasurements = null;
-		try {
-			creekMeasurements = objectMapper.readValue(stringMessage, new TypeReference<List<CreekMeasurement>>() {});
+	public void accept(List<CreekMeasurement> creekMeasurements) {
+
 			for(CreekMeasurement creekMeasurement : creekMeasurements) {
 				storeCreekMeasurement(creekMeasurement);
 			}
-		}
-		catch (JsonProcessingException jpe) {
-			throw new IllegalStateException(jpe);
-		}
 	}
 
 	private void storeCreekMeasurement(CreekMeasurement creekMeasurement) {

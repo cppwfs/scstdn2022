@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    function:
+      definition: transformCreekMeasurement
+    stream:
+      function:
+        bindings:
+          transformCreekMeasurement-in-0: input
+          transformCreekMeasurement-out-0: output
+      bindings:
+        input:
+          destination: usgs-data
+          group: foo
+        output:
+          destination: creek-data
+          group: foo

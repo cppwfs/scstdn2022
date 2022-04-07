@@ -1,7 +1,9 @@
 package io.spring.creekconsumer;
 
+import java.util.List;
 import java.util.function.Consumer;
 
+import io.spring.creekfunctions.CreekMeasurement;
 import io.spring.creekfunctions.CreekMeasurementRepository;
 import javax.sql.DataSource;
 
@@ -17,7 +19,7 @@ public class CreekMeasurementRepositoryConsumerApplication {
 	}
 
 	@Bean
-	public Consumer<String> creekMeasurementRepository(DataSource dataSource) {
+	public Consumer<List<CreekMeasurement>> creekMeasurementRepository(DataSource dataSource) {
 		return new CreekMeasurementRepository(dataSource);
 	}
 }

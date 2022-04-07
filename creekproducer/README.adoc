@@ -1,11 +1,11 @@
 = Spring Cloud Stream Past, Present, and Future.
 
 == Creek Producer
-A boot application that will retrieve the creek data from the USGS for a selected set of creeks and translate the results to a list of `CreekMeasurement` s.
+A boot application that will retrieve the creek data from the USGS for a selected set of creeks and send it to the specified destination (rabbit exchange).
 
 ==== Build & Run Sample
 [source,bash]
 ----
 mvn clean package
-java -jar target/creekproducer-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.output.destination=creek-data  --server.port=0
+java -jar target/creekproducer-0.0.1-SNAPSHOT.jar --spring.cloud.stream.bindings.output.destination=usgs-data  --spring.cloud.stream.bindings.output.group=foo --server.port=0
 ----

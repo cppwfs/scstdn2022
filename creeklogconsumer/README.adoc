@@ -3,6 +3,8 @@
 == Creek Log  Consumer
 A boot application that will consume the `CreekMeasurement` s and log the streams that are safe-ish to kayak from the provided data.
 
+NOTE: Do not determine if it is safe to kayak a stream, river, or any body of water based soley on the this analysis.  It is for demonstration purposes only.
+
 === Build & Run Sample
 [source,bash]
 ----

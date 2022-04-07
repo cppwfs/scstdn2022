@@ -30,8 +30,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 /**
  * Accepts a tab delimited list of data from the USGS  Water Data Restful API and converts it ot a list of {@link CreekMeasurement}s.
  */
-public class TransformCreekMeasurement implements Function<String, String> {
-	public String apply(String rawData) {
+public class TransformCreekMeasurement implements Function<String, List<CreekMeasurement>> {
+	public List<CreekMeasurement> apply(String rawData) {
 		String[] results = rawData.split(System.lineSeparator());
 		List<String> arrayData = Arrays.stream(results)
 				.filter(result -> result.startsWith("USGS"))
@@ -44,11 +44,6 @@ public class TransformCreekMeasurement implements Function<String, String> {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 
-		try {
-			return objectMapper.writeValueAsString(creekMeasurements);
-		}
-		catch (JsonProcessingException e) {
-			throw new IllegalStateException(e);
-		}
+			return creekMeasurements;
 	}
 }

@@ -2,10 +2,7 @@ package io.spring.creekproducer;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.function.Function;
 import java.util.function.Supplier;
-
-import io.spring.creekfunctions.TransformCreekMeasurement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -63,11 +60,6 @@ public class CreekproducerApplication {
 			System.out.println("Failed to retrieve data from USGS using sample date");;
 		}
 		return result;
-	}
-
-	@Bean
-	public Function<String, String> transformCreekMeasurement() {
-		return new TransformCreekMeasurement();
 	}
 
 }
