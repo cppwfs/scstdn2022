@@ -29,7 +29,7 @@ Single App POC that is used as a basic outline for the demo.
 
 [#img-processflow]
 .Process Flow
-image::https://github.com/cppwfs/scstdn2022/blob/main/SCSt-DN.png?raw=true[SCSt,200,100]
+image::https://github.com/cppwfs/scstdn2022/blob/main/SCSt-DN.png?raw=true[SCSt]
 
 
 
