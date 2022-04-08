@@ -2,8 +2,6 @@ package io.spring.streampoc;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -129,10 +126,10 @@ public class StreampocApplication {
 
 	private String getSymbol(CreekMeasurement controlMeasurement, CreekMeasurement previousMeasurement,
 			CreekProperties properties) {
-		double warnPercentage = ((controlMeasurement.getStreamHeight() - previousMeasurement.getStreamHeight())
+		double warnPercentage = ((previousMeasurement.getStreamHeight() - controlMeasurement.getStreamHeight() )
 				/ previousMeasurement.getStreamHeight());
 		String symbol = Character.toString('\u2705');
-		if (Math.abs(warnPercentage) > properties.getWarningPercent()) {
+		if (Math.abs(warnPercentage) > .2f) {
 			symbol = Character.toString('\u274c');
 		}
 		return symbol;
