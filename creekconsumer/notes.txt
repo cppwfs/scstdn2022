@@ -1,0 +1,2 @@
+- show how we can start consumer/producer without Rabbit running to show reconnects, 
+- log consumer, then add sms consumer as another instance of the same app controlled by properties

@@ -19,7 +19,7 @@ package io.spring.creekfunctions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -28,13 +28,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * Looks at each creek sites data for each payload and determines if the creek
  * is safe-ish for kayaking. It then prints this result to console.
  */
-public class LogCreekMeasurements implements Consumer<List<CreekMeasurement>> {
+public class ReportCreekMeasurements implements Function<List<CreekMeasurement>, String> {
 
 	private ObjectMapper objectMapper;
 
 	private Map<String, String> nameCodeMap;
 
-	public LogCreekMeasurements() {
+	public ReportCreekMeasurements() {
 		this.objectMapper = new ObjectMapper();
 		this.objectMapper.registerModule(new JavaTimeModule());
 		nameCodeMap = new HashMap<>();
@@ -42,30 +42,36 @@ public class LogCreekMeasurements implements Consumer<List<CreekMeasurement>> {
 		nameCodeMap.put("02336300", "Peachtree Creek Atlanta");
 		nameCodeMap.put("02312700", "Outlet River Lake Panasoffkee");
 	}
-
+	
 	@Override
-	public void accept(List<CreekMeasurement> creekMeasurements) {
+	public String apply(List<CreekMeasurement> creekMeasurements) {
+		
+		StringBuffer buffer = new StringBuffer();
+		
 		CreekMeasurement controlMeasurement = null;
 		CreekMeasurement previousMeasurement = null;
-		if(creekMeasurements.size() == 0) {
-			return;
-		}
+//		if(creekMeasurements.size() == 0) {
+//			return;
+//		}
 		for (CreekMeasurement measurement : creekMeasurements) {
 			if (controlMeasurement == null) {
 				controlMeasurement = measurement;
 				continue;
 			}
 			if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
-				System.out.println(getSymbol(controlMeasurement, previousMeasurement) + " " +
-						nameCodeMap.get(previousMeasurement.getSensorId()) );
 				controlMeasurement = measurement;
+				buffer.append(getSymbol(controlMeasurement, previousMeasurement) + " " +
+						nameCodeMap.get(previousMeasurement.getSensorId()).trim());
+				buffer.append("\n");
 			}
 			previousMeasurement = measurement;
 		}
-		System.out.println(getSymbol(controlMeasurement, previousMeasurement) + " " +
+		buffer.append(getSymbol(controlMeasurement, previousMeasurement) + " " +
 				nameCodeMap.get(previousMeasurement.getSensorId()));
+		return buffer.toString();
 
 	}
+
 
 	private String getSymbol(CreekMeasurement controlMeasurement, CreekMeasurement previousMeasurement) {
 		double warnPercentage = ((previousMeasurement.getStreamHeight() - controlMeasurement.getStreamHeight() )
@@ -76,4 +82,5 @@ public class LogCreekMeasurements implements Consumer<List<CreekMeasurement>> {
 		}
 		return symbol;
 	}
+	
 }
