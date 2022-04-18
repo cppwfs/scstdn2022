@@ -31,6 +31,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  */
 public class TransformCreekMeasurement implements Function<String, List<CreekMeasurement>> {
 	public List<CreekMeasurement> apply(String rawData) {
+		System.out.println(rawData);
 		String[] results = rawData.split(System.lineSeparator());
 		List<String> arrayData = Arrays.stream(results)
 				.filter(result -> result.startsWith("USGS"))
@@ -40,8 +41,6 @@ public class TransformCreekMeasurement implements Function<String, List<CreekMea
 			CreekMeasurement creekMeasurement = new CreekMeasurement(streamData);
 			creekMeasurements.add(creekMeasurement);
 		});
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
 
 			return creekMeasurements;
 	}

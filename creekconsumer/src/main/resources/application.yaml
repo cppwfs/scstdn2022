@@ -1,12 +1,12 @@
 spring:
   cloud:
     function:
-      definition: generateReport|sms
+      definition: generateReport|log
     stream:
       function:
         bindings:
-          generateReportsms-in-0: input
+          generateReportlog-in-0: input
       bindings:
         input:
           destination: creek-data
-          group: sms
+          group: log

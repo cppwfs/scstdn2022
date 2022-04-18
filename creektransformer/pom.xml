@@ -11,7 +11,7 @@
 	<groupId>io.spring</groupId>
 	<artifactId>creektransformer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Creek Transfomer</name>
+	<name>Creek Transformer</name>
 	<description>Transformer for Creek Data</description>
 	<properties>
 		<java.version>17</java.version>
