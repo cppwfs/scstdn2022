@@ -1,13 +1,28 @@
 = Spring Cloud Stream Past, Present, and Future
 
 == Creek Log  Consumer
-A boot application that will consume the `CreekMeasurement` s and log the streams that are safe-ish to kayak from the provided data.
+A boot application that will consume the `CreekMeasurement` s and log or send an SMS message to a phone number, the streams that are safe-ish to kayak from the provided data.
 
 NOTE: Do not determine if it is safe to kayak a stream, river, or any body of water based soley on the this analysis.  It is for demonstration purposes only.
 
-=== Build & Run Sample
+=== Build Sample
 [source,bash]
 ----
-mvn clean package -DskipTests
-java -jar target/creeklogconsumer-0.0.1-SNAPSHOT.jar  --server.port=0 --spring.cloud.stream.bindings.input.destination=creek-data --spring.cloud.stream.bindings.input.group=creek-data-group
+mvn clean package
+java -jar target/creekconsumer-0.0.1-SNAPSHOT.jar  --spring.cloud.function.definition='generateReport|sms' --spring.cloud.stream.function.bindings.generateReportsms-in-0=input --spring.cloud.stream.bindings.input.group=sms --io.spring.smsKey=yourkey --io.spring.phoneNumber=+1XXXXXXXXXX
+----
+
+=== Run Sample
+==== Send Creek Report via SMS
+This will send the report to the specified phone number .   You must also provide the sms key.
+[source,bash]
+----
+java -jar target/creekconsumer-0.0.1-SNAPSHOT.jar  --spring.cloud.function.definition='generateReport|sms' --spring.cloud.stream.function.bindings.generateReportsms-in-0=input --spring.cloud.stream.bindings.input.group=sms --io.spring.smsKey=yourkey --io.spring.phoneNumber=+1XXXXXXXXXX
+----
+
+==== Write Creek Report to console
+This will write the report to the console.
+[source,bash]
+----
+java -jar target/creekconsumer-0.0.1-SNAPSHOT.jar
 ----

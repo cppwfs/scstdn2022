@@ -16,8 +16,8 @@ A boot application that will retrieve the creek data from the USGS for a selecte
 A boot application transforms USGS Water Information System data to `CreekMeasurements` s.
 
 
-=== Creek Log Consumer
-A boot application that will consume the `CreekMeasurement` s from the stream and either log or send an sms message containging information on  the creeks that are safe-ish to kayak from the provided data.
+=== Creek Consumer
+A boot application that will consume the `CreekMeasurement` s from the stream and either log or send an sms message containing information on  the creeks that are safe-ish to kayak from the provided data.
 
 NOTE: Do not determine if it is safe to kayak a stream, river, or any body of water based soley on the this analysis.  It is for demonstration purposes only.
 
@@ -31,6 +31,36 @@ Single App POC that is used as a basic outline for the demo.
 .Process Flow
 image::https://github.com/cppwfs/scstdn2022/blob/main/SCSt-DN.png?raw=true[SCSt]
 
+=== Running the full demo
+
+==== Start the consumers
+===== Send Creek Report via SMS
+
+This will send the report to the specified phone number .   You must also provide the sms key.
+[source,bash]
+----
+java -jar creekconsumer/target/creekconsumer-0.0.1-SNAPSHOT.jar  --spring.cloud.function.definition='generateReport|sms' --spring.cloud.stream.function.bindings.generateReportsms-in-0=input --spring.cloud.stream.bindings.input.group=sms --io.spring.smsKey=yourkey --io.spring.phoneNumber=+1XXXXXXXXXX
+----
+
+===== Write Creek Report to console
+
+This will write the report to the console.
+[source,bash]
+----
+java -jar creekconsumer/target/creekconsumer-0.0.1-SNAPSHOT.jar
+----
+
+==== Start the transformer
+[source,bash]
+----
+java -jar creektransformer/target/creektransformer-0.0.1-SNAPSHOT.jar
+----
+
+==== Start the Producer
+[source,bash]
+----
+java -jar creekproducer/targecreekproducer-0.0.1-SNAPSHOT.jar
+----
 
 
 

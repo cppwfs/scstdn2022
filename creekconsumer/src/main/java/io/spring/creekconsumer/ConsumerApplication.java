@@ -10,6 +10,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +18,7 @@ import io.spring.creekfunctions.CreekMeasurement;
 import io.spring.creekfunctions.ReportCreekMeasurements;
 
 @SpringBootApplication
+@EnableConfigurationProperties(ConsumerProperties.class)
 public class ConsumerApplication {
 
 	public static void main(String[] args) {
@@ -39,20 +41,21 @@ public class ConsumerApplication {
 	
 	@Bean
 	@ConditionalOnProperty(value="spring.cloud.function.definition", havingValue = "generateReport|sms")
-	public Consumer<String> sms() {
+	public Consumer<String> sms(ConsumerProperties consumerProperties) {
 		System.out.println("==> Creating SMS SENDER");
 		return v -> {
 			System.out.println("Request sms string: " +v);
 			try {	
 				StringBuilder builder = new StringBuilder("https://textbelt.com/text");
 				builder.append("?phone=");
-				builder.append(URLEncoder.encode("+1<yourphonenumber>", StandardCharsets.UTF_8.toString()));
+				builder.append(URLEncoder.encode(consumerProperties.getPhoneNumber(), StandardCharsets.UTF_8.toString()));
 				builder.append("&message=");
-				builder.append(URLEncoder.encode("Here is your monday morning fishing report: \n" + v, StandardCharsets.UTF_8.toString()));
+				builder.append(URLEncoder.encode("Here is your kayaking report: \n" + v, StandardCharsets.UTF_8.toString()));
 				builder.append("&key="); 
-				builder.append(URLEncoder.encode("<get key>", StandardCharsets.UTF_8.toString()));
-				System.out.println("Request string: " + builder.toString());
+				builder.append(URLEncoder.encode(consumerProperties.getSmsKey(), StandardCharsets.UTF_8.toString()));
+				System.out.println("Request string: " + builder);
 				RestTemplate rest = new RestTemplate();
+				rest.getForObject(builder.toString(),String.class);
 			} 
 			catch (Exception e) {
 				e.printStackTrace();
