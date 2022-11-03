@@ -55,7 +55,7 @@ public class ConsumerApplication {
 				builder.append(URLEncoder.encode(consumerProperties.getSmsKey(), StandardCharsets.UTF_8.toString()));
 				System.out.println("Request string: " + builder);
 				RestTemplate rest = new RestTemplate();
-				rest.getForObject(builder.toString(),String.class);
+				System.out.println(rest.getForObject(builder.toString(),String.class));
 			} 
 			catch (Exception e) {
 				e.printStackTrace();

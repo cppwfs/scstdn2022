@@ -89,6 +89,7 @@ public class StreampocApplication {
 					CreekMeasurement creekMeasurement = new CreekMeasurement(streamData);
 					creekMeasurements.add(creekMeasurement);
 					repository.save(creekMeasurement);
+					System.out.println(">>>> " + creekMeasurement);
 				});
 				return creekMeasurements;
 			}
@@ -129,9 +130,11 @@ public class StreampocApplication {
 		double warnPercentage = ((previousMeasurement.getStreamHeight() - controlMeasurement.getStreamHeight() )
 				/ previousMeasurement.getStreamHeight());
 		String symbol = Character.toString('\u2705');
-		if (Math.abs(warnPercentage) > .2f) {
+		if (Math.abs(warnPercentage) > properties.getWarningPercent()) {
 			symbol = Character.toString('\u274c');
 		}
+		System.out.println("***** " + warnPercentage);
+
 		return symbol;
 	}
 

@@ -10,3 +10,4 @@ spring:
         input:
           destination: creek-data
           group: log
+

@@ -50,18 +50,15 @@ public class ReportCreekMeasurements implements Function<List<CreekMeasurement>,
 		
 		CreekMeasurement controlMeasurement = null;
 		CreekMeasurement previousMeasurement = null;
-//		if(creekMeasurements.size() == 0) {
-//			return;
-//		}
 		for (CreekMeasurement measurement : creekMeasurements) {
 			if (controlMeasurement == null) {
 				controlMeasurement = measurement;
 				continue;
 			}
 			if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
-				controlMeasurement = measurement;
 				buffer.append(getSymbol(controlMeasurement, previousMeasurement) + " " +
 						nameCodeMap.get(previousMeasurement.getSensorId()).trim());
+				controlMeasurement = measurement;
 				buffer.append("\n");
 			}
 			previousMeasurement = measurement;
@@ -77,7 +74,7 @@ public class ReportCreekMeasurements implements Function<List<CreekMeasurement>,
 		double warnPercentage = ((previousMeasurement.getStreamHeight() - controlMeasurement.getStreamHeight() )
 				/ previousMeasurement.getStreamHeight());
 		String symbol = Character.toString('\u2705');
-		if (Math.abs(warnPercentage) > .2) {
+		if (Math.abs(warnPercentage) > .005) {
 			symbol = Character.toString('\u274c');
 		}
 		return symbol;

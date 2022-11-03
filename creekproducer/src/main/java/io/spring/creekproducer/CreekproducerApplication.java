@@ -12,6 +12,34 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class CreekproducerApplication {
 
+	public static void main(String[] args) {
+		SpringApplication.run(CreekproducerApplication.class, args);
+	}
+
+	@Bean
+	public Supplier<String> creekDataSupplier() {
+		return () -> getCreekData();
+	}
+
+	protected String getCreekData() {
+		ZoneId zoneId = ZoneId.of("America/New_York");
+		LocalDateTime endTime = LocalDateTime.now(zoneId);
+		LocalDateTime startTime = endTime.minusHours(5);
+		RestTemplate template = new RestTemplate();
+		String result = SAMPLE_DATA;
+		try {
+			result = template.getForObject("https://waterservices.usgs.gov/nwis/iv/?sites=" + "02336300,02335757,02312700" +
+					"&parameterCd=00065&startDT=" + startTime + "&endDT=" +
+					endTime + "&siteStatus=all&format=rdb", String.class);
+		} catch(Exception exception) {
+			System.out.println("Failed to retrieve data from USGS using sample date");;
+		}
+		return result;
+	}
+
+
+	
+
 	private static final String SAMPLE_DATA = """
 				USGS	02335757	2022-03-23 04:45	EDT	3.33	P
 				USGS	02335757	2022-03-23 05:00	EDT	3.36	P
@@ -36,30 +64,4 @@ public class CreekproducerApplication {
 				USGS	02335757	2022-03-23 09:45	EDT	4.33	P
 				USGS	02335757	2022-03-23 10:00	EDT	4.36	P
 				USGS	02335757	2022-03-23 10:15	EDT	4.41	P""";
-
-	public static void main(String[] args) {
-		SpringApplication.run(CreekproducerApplication.class, args);
-	}
-
-	@Bean
-	public Supplier<String> creekDataSupplier() {
-		return () -> getCreekData();
-	}
-
-	protected String getCreekData() {
-		ZoneId zoneId = ZoneId.of("America/New_York");
-		LocalDateTime endTime = LocalDateTime.now(zoneId);
-		LocalDateTime startTime = endTime.minusHours(4);
-		RestTemplate template = new RestTemplate();
-		String result = SAMPLE_DATA;
-		try {
-			result = template.getForObject("https://waterservices.usgs.gov/nwis/iv/?sites=" + "02336300,02335757,02312700" +
-					"&parameterCd=00065&startDT=" + startTime + "&endDT=" +
-					endTime + "&siteStatus=all&format=rdb", String.class);
-		} catch(Exception exception) {
-			System.out.println("Failed to retrieve data from USGS using sample date");;
-		}
-		return result;
-	}
-
 }
