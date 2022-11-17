@@ -16,9 +16,7 @@
 
 package io.spring.creekfunctions;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,15 +30,9 @@ public class ReportCreekMeasurements implements Function<List<CreekMeasurement>,
 
 	private ObjectMapper objectMapper;
 
-	private Map<String, String> nameCodeMap;
-
 	public ReportCreekMeasurements() {
 		this.objectMapper = new ObjectMapper();
 		this.objectMapper.registerModule(new JavaTimeModule());
-		nameCodeMap = new HashMap<>();
-		nameCodeMap.put("02335757", "Big Creek Roswell");
-		nameCodeMap.put("02336300", "Peachtree Creek Atlanta");
-		nameCodeMap.put("02312700", "Outlet River Lake Panasoffkee");
 	}
 	
 	@Override
@@ -57,14 +49,14 @@ public class ReportCreekMeasurements implements Function<List<CreekMeasurement>,
 			}
 			if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
 				buffer.append(getSymbol(controlMeasurement, previousMeasurement) + " " +
-						nameCodeMap.get(previousMeasurement.getSensorId()).trim());
+						previousMeasurement.getName().trim());
 				controlMeasurement = measurement;
 				buffer.append("\n");
 			}
 			previousMeasurement = measurement;
 		}
 		buffer.append(getSymbol(controlMeasurement, previousMeasurement) + " " +
-				nameCodeMap.get(previousMeasurement.getSensorId()));
+				previousMeasurement.getName());
 		return buffer.toString();
 
 	}

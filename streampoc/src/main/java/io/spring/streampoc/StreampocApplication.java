@@ -28,8 +28,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableConfigurationProperties(CreekProperties.class)
 public class StreampocApplication {
 
-	private Map<String, String> nameCodeMap;
-
 	private static final Log logger = LogFactory
 			.getLog(StreampocApplication.class);
 
@@ -48,11 +46,7 @@ public class StreampocApplication {
 		return new ApplicationRunner() {
 
 			@Override
-			public void run(ApplicationArguments args) throws Exception {
-				nameCodeMap = new HashMap<>();
-				nameCodeMap.put("02335757", "Big Creek Roswell");
-				nameCodeMap.put("02336300", "Peachtree Creek Atlanta");
-				nameCodeMap.put("02312700", "Outlet River Lake Panasoffkee");
+			public void run(ApplicationArguments args) {
 
 				ZoneId zoneId = ZoneId.of("America/New_York");
 				LocalDateTime endTime = LocalDateTime.now(zoneId);
@@ -66,7 +60,6 @@ public class StreampocApplication {
 				} catch(Exception exception) {
 					System.out.println("Failed to retrieve data from USGS using sample date");;
 				}
-
 				List<CreekMeasurement> creekMeasurements = transformCreekMeasurement.apply(result);
 				produceReport.accept(creekMeasurements);
 				context.close();
@@ -81,15 +74,17 @@ public class StreampocApplication {
 			@Override
 			public List<CreekMeasurement> apply(String rawData) {
 				String[] results = rawData.split(System.lineSeparator());
+
+				Map<String, String> streamMetadata = getMetaData(results);
 				List<String> arrayData = Arrays.stream(results)
 						.filter(result -> result.startsWith("USGS"))
 						.collect(Collectors.toList());
 				List<CreekMeasurement> creekMeasurements = new ArrayList<>();
 				arrayData.forEach(streamData -> {
 					CreekMeasurement creekMeasurement = new CreekMeasurement(streamData);
+					creekMeasurement.setName(streamMetadata.get(creekMeasurement.getSensorId()));
 					creekMeasurements.add(creekMeasurement);
 					repository.save(creekMeasurement);
-					System.out.println(">>>> " + creekMeasurement);
 				});
 				return creekMeasurements;
 			}
@@ -112,14 +107,14 @@ public class StreampocApplication {
 					}
 					if (!measurement.getSensorId().equals(controlMeasurement.getSensorId())) {
 						logger.info(getSymbol(controlMeasurement, previousMeasurement, properties) + " " +
-								nameCodeMap.get(previousMeasurement.getSensorId())) ;
+								previousMeasurement.getName()) ;
 		
 						controlMeasurement = measurement;
 					}
 					previousMeasurement = measurement;
 				}
 				logger.info(getSymbol(controlMeasurement, previousMeasurement, properties) + " " +
-						nameCodeMap.get(previousMeasurement.getSensorId()));
+						previousMeasurement.getName());
 			}
 			
 		};
@@ -133,7 +128,7 @@ public class StreampocApplication {
 		if (Math.abs(warnPercentage) > properties.getWarningPercent()) {
 			symbol = Character.toString('\u274c');
 		}
-		System.out.println("***** " + warnPercentage);
+//		System.out.println("***** " + warnPercentage);
 
 		return symbol;
 	}
@@ -163,5 +158,17 @@ public class StreampocApplication {
 				USGS	02335757	2022-03-23 10:00	EDT	4.36	P
 				USGS	02335757	2022-03-23 10:15	EDT	4.41	P""";
 
+
+	private Map<String, String> getMetaData(String[] arrayData) {
+		Map<String, String> result = new HashMap<>();
+
+		for(String row : arrayData) {
+			if(row.startsWith("#    USGS")) {
+				String[] tokens = row.split(" ");
+				result.put(row.substring(10, 18), row.substring(19));
+			}
+		}
+		return result;
+	}
 
 }

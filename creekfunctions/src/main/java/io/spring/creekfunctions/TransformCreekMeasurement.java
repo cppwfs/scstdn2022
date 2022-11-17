@@ -16,9 +16,7 @@
 
 package io.spring.creekfunctions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -33,15 +31,29 @@ public class TransformCreekMeasurement implements Function<String, List<CreekMea
 	public List<CreekMeasurement> apply(String rawData) {
 		System.out.println(rawData);
 		String[] results = rawData.split(System.lineSeparator());
+		Map<String, String> streamMetadata = getMetaData(results);
 		List<String> arrayData = Arrays.stream(results)
 				.filter(result -> result.startsWith("USGS"))
 				.collect(Collectors.toList());
 		List<CreekMeasurement> creekMeasurements = new ArrayList<>();
 		arrayData.forEach(streamData -> {
 			CreekMeasurement creekMeasurement = new CreekMeasurement(streamData);
+			creekMeasurement.setName(streamMetadata.get(creekMeasurement.getSensorId()));
 			creekMeasurements.add(creekMeasurement);
 		});
 
 			return creekMeasurements;
+	}
+
+	private Map<String, String> getMetaData(String[] arrayData) {
+		Map<String, String> result = new HashMap<>();
+
+		for(String row : arrayData) {
+			if(row.startsWith("#    USGS")) {
+				String[] tokens = row.split(" ");
+				result.put(row.substring(10, 18), row.substring(19));
+			}
+		}
+		return result;
 	}
 }

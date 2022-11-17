@@ -26,10 +26,12 @@ public class CreekMeasurementTests {
 	void basicTest() {
 		CreekMeasurement creekMeasurement = new CreekMeasurement(
 				"USGS\t02335757\t2022-03-09 10:45\tEST\t5.60\tP");
+		creekMeasurement.setName("MYSENSOR");
 		assertThat(creekMeasurement.getCreekMeasurementKey()).isEqualTo("023357572022-03-09T10:45-05:00[America/New_York]");
 		assertThat(creekMeasurement.getSensorId()).isEqualTo("02335757");
 		assertThat(creekMeasurement.getDateCaptured()).isEqualTo("2022-03-09T10:45-05:00[America/New_York]");
 		assertThat(creekMeasurement.getStatus()).isEqualTo("P");
+		assertThat(creekMeasurement.getName()).isEqualTo("MYSENSOR");
 		assertThat(creekMeasurement.getStreamHeight()).isEqualTo(5.6f);
 	}
 

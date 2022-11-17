@@ -29,6 +29,8 @@ public class CreekMeasurement {
 
 	private String creekMeasurementKey;
 
+	private String name;
+
 	private String sensorId;
 	private ZonedDateTime dateCaptured;
 	private Float streamHeight;
@@ -84,6 +86,14 @@ public class CreekMeasurement {
 
 	public void setCreekMeasurementKey(String creekMeasurementKey) {
 		this.creekMeasurementKey = creekMeasurementKey;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
