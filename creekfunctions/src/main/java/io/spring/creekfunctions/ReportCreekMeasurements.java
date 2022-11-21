@@ -27,13 +27,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * is safe-ish for kayaking. It then prints this result to console.
  */
 public class ReportCreekMeasurements implements Function<List<CreekMeasurement>, String> {
-
-	private ObjectMapper objectMapper;
-
-	public ReportCreekMeasurements() {
-		this.objectMapper = new ObjectMapper();
-		this.objectMapper.registerModule(new JavaTimeModule());
-	}
 	
 	@Override
 	public String apply(List<CreekMeasurement> creekMeasurements) {

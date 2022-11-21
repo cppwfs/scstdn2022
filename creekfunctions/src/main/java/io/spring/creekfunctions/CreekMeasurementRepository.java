@@ -34,14 +34,10 @@ public class CreekMeasurementRepository implements Consumer<List<CreekMeasuremen
 
 	private static final Log logger = LogFactory.getLog(CreekMeasurementRepository.class);
 
-	private ObjectMapper objectMapper;
-
 	private DataSource dataSource;
 
 	public CreekMeasurementRepository(DataSource dataSource) {
 		this.dataSource = dataSource;
-		this.objectMapper = new ObjectMapper();
-		this.objectMapper.registerModule(new JavaTimeModule());
 	}
 
 	@Override
