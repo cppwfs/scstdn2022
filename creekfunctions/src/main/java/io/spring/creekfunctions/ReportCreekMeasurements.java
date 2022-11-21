@@ -19,9 +19,6 @@ package io.spring.creekfunctions;
 import java.util.List;
 import java.util.function.Function;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 /**
  * Looks at each creek sites data for each payload and determines if the creek
  * is safe-ish for kayaking. It then prints this result to console.
