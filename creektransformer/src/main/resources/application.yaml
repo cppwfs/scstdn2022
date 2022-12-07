@@ -13,4 +13,3 @@ spring:
           group: foo
         output:
           destination: creek-data
-          group: foo

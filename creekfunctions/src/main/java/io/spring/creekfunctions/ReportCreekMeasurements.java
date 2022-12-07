@@ -24,7 +24,6 @@ import java.util.function.Function;
  * is safe-ish for kayaking. It then prints this result to console.
  */
 public class ReportCreekMeasurements implements Function<List<CreekMeasurement>, String> {
-	
 	@Override
 	public String apply(List<CreekMeasurement> creekMeasurements) {
 		

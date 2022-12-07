@@ -11,6 +11,14 @@ spring:
       bindings:
         output:
           destination: usgs-data
-          group: foo
+
+
+
+
+
+
+
+
+
 server:
   port: 0
