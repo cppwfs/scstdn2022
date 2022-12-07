@@ -18,8 +18,6 @@ package io.spring.creekfunctions;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,13 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TransformCreekMeasurementTests {
 
 	TransformCreekMeasurement transformCreekMeasurement;
-	ObjectMapper objectMapper;
 
 	@BeforeEach
 	public void setup() {
 		this.transformCreekMeasurement = new TransformCreekMeasurement();
-		this.objectMapper = new ObjectMapper();
-		this.objectMapper.registerModule(new JavaTimeModule());
 	}
 
 	@Test

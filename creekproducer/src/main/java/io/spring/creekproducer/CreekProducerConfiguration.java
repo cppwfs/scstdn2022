@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-public class CreekproducerApplication {
+public class CreekProducerConfiguration {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CreekproducerApplication.class, args);
+		SpringApplication.run(CreekProducerConfiguration.class, args);
 	}
 
 	@Bean
