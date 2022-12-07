@@ -19,10 +19,10 @@ import io.spring.creekfunctions.ReportCreekMeasurements;
 
 @SpringBootApplication
 @EnableConfigurationProperties(ConsumerProperties.class)
-public class ConsumerApplication {
+public class ConsumerConfiguration {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(ConsumerApplication.class).web(WebApplicationType.NONE).run(args);
+		new SpringApplicationBuilder(ConsumerConfiguration.class).web(WebApplicationType.NONE).run(args);
 	}
 	
 	@Bean	

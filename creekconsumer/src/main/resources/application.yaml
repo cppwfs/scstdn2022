@@ -11,3 +11,18 @@ spring:
           destination: creek-data
           group: log
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+server:
+  port: 0
