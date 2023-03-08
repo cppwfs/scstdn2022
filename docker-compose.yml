@@ -1,0 +1,70 @@
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.10-management-alpine
+    container_name: creek-rabbitmq
+    expose:
+      - '5672'
+    ports:
+      - '15672:15672'
+
+  mariadb:
+    image: mariadb
+    container_name: creek-mariadb
+    environment:
+      - MARIADB_ROOT_PASSWORD=creek-pass
+      - MARIADB_PASSWORD=creek-pass
+      - MARIADB_MYSQL_LOCALHOST_GRANTS=creek
+      - MARIADB_USER=creek
+      - MARIADB_DATABASE=creek-db
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+
+  creek-consumer:
+    image: creek-consumer
+    container_name: creek-consumer
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+
+  creek-transformer:
+    image: creek-transformer
+    container_name: creek-transformer
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_DESTINATION=usgs-data
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_GROUP=foo
+      - SPRING_CLOUD_STREAM_BINDINGS_OUTPUT_DESTINATION=creek-data
+      - SPRING_CLOUD_STREAM.BINDINGS.OUTPUT_GROUP=foo
+    depends_on:
+      - rabbitmq
+
+  creek-storage:
+    image: creek-storage
+    container_name: creek-storage
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/creek-db?useSsl=false
+      - SPRING_DATASOURCE_USERNAME=creek
+      - SPRING_DATASOURCE_PASSWORD=creek-pass
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.mariadb.jdbc.Driver
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_DESTINATION=creek-data
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_GROUP=creek-data-group
+
+    depends_on:
+      - rabbitmq
+
+  creek-producer:
+    image: creek-producer
+    container_name: creek-producer
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_CLOUD_STREAM_BINDINGS_OUTPUT_DESTINATION=usgs-data
+      - SPRING_CLOUD_STREAM_BINDINGS_OUTPUT_GROUP=foo
+    depends_on:
+      - creek-consumer
+      - creek-transformer
+      - creek-storage

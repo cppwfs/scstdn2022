@@ -63,4 +63,62 @@ java -jar creekproducer/targecreekproducer-0.0.1-SNAPSHOT.jar
 ----
 
 
+== Using Docker and Docker Compose
 
+Build the docker images per Project:
+
+[source,bash]
+.creekconsumer
+----
+cd creekconsumer
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=creek-consumer
+----
+
+[source,bash]
+.creekproducer
+----
+cd creekproducer
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=creek-producer
+----
+
+
+.[source,bash]
+creektransformer
+----
+cd creektransformer
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=creek-transformer
+----
+
+
+[source,bash]
+.creekmeasurementrepositoryconsumer
+----
+cd creekmeasurementrepositoryconsumer
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=creek-storage
+----
+
+Now, you can use the following `docker-compose.yml` file and execute:
+
+[source,yaml]
+----
+include::docker-compose.yml[]
+----
+
+[source,bash]
+----
+docker-compose up
+----
+
+You can open your browser the http://localhost:15672[RabbitMQ Console^] to see the Exchanges and Queues created.
+
+The port `3306` is exposed, so you can use a SQL Client for a MySQL/MariaDB and see the Table and data that stores the creek results.
+
+
+=== Cleaning up
+
+In another window and in the same folder where you ran the `docker-compose` command, you can run:
+
+[source,bash]
+----
+docker-compose down
+----
