@@ -27,6 +27,9 @@ services:
     container_name: creek-consumer
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
+      - LANG=en_US.utf8
+      - LC_ALL=en_US.utf8
+      - JDK_JAVA_OPTIONS='-Dfile.encoding=UTF-8'
     depends_on:
       - rabbitmq
 
