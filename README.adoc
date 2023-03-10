@@ -65,6 +65,15 @@ java -jar creekproducer/targecreekproducer-0.0.1-SNAPSHOT.jar
 
 == Using Docker and Docker Compose
 
+You can run the following script to build all the projects' docker images by running the following script:
+
+[source,bash]
+----
+./create-images.sh
+----
+
+Or your can build each of the projects below independently as follows:
+
 Build the docker images per Project:
 
 [source,bash]
@@ -96,6 +105,8 @@ cd creektransformer
 cd creekmeasurementrepositoryconsumer
 ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=creek-storage
 ----
+
+=== Using docker-compose to launch the services.
 
 Now, you can use the following `docker-compose.yml` file and execute:
 
